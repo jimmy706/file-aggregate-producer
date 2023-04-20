@@ -34,7 +34,7 @@ public class SaleFilesScheduler {
         this.fileArchiveHandler = fileArchiveHandler;
     }
 
-    @Scheduled(fixedDelay = 6000) // Run every minute
+    @Scheduled(fixedDelay = 60000) // Run every minute
     public void schedullyReadSalesFiles() throws IOException {
         LOG.info("Started to read sale files");
         Resource resource = resourceLoader.getResource("classpath:sales");

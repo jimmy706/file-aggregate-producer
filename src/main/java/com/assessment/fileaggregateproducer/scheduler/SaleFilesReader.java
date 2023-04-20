@@ -78,7 +78,10 @@ public class SaleFilesReader {
                 result.put(ReadFileStatus.SUCCESS, result.get(ReadFileStatus.SUCCESS) + 1);
                 try {
                     LOG.info("Moving read file to archive folder");
-                    fileArchiveHandler.removeReadFileAndMoveToArchiveFolder(f);
+                    boolean successArchiveFile = fileArchiveHandler.removeReadFileAndMoveToArchiveFolder(f);
+                    if (!successArchiveFile) {
+                        LOG.warn("Failed to move {} to archive folder", f.getPath());
+                    }
                 } catch (IOException e) {
                     f.delete();
                     LOG.warn("Failed to move the file to archive folder due to {}", e.getMessage());

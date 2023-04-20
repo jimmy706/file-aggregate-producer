@@ -31,6 +31,10 @@ public class FileArchiveHandler {
         File archiveFolder = archvieResource.getFile();
 
         Path archivePath = Paths.get(archiveFolder.getPath() + File.separator + file.getName());
+        File archiveFile = archivePath.toFile();
+        if (archiveFile.exists()) {
+            archiveFile.delete();
+        }
         return file.renameTo(archivePath.toFile());
     }
 }
