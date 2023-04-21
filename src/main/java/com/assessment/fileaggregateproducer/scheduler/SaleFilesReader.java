@@ -2,6 +2,7 @@ package com.assessment.fileaggregateproducer.scheduler;
 
 import com.assessment.fileaggregateproducer.model.ReadFileStatus;
 import com.assessment.fileaggregateproducer.model.SaleInformation;
+import com.assessment.fileaggregateproducer.model.SalesFileInformation;
 import com.assessment.fileaggregateproducer.producer.SalesFileProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
@@ -16,10 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SaleFilesReader {
@@ -46,8 +44,9 @@ public class SaleFilesReader {
             return false;
         }
         try (CSVReader csvReader = new CSVReader(new FileReader(saleFile))) {
-            String[] headers = csvReader.readNext();
+            csvReader.readNext(); // Read the header
             String[] record;
+            List<SaleInformation> saleInformations = new ArrayList<>();
             while ((record = csvReader.readNext()) != null) {
                 Date datetime = format.parse(record[0]);
                 String product = record[1];
@@ -55,10 +54,12 @@ public class SaleFilesReader {
                 double price = Double.parseDouble(record[3]);
 
                 SaleInformation saleInformation = new SaleInformation(datetime, product, quantity, price);
-                String salesData = objectMapper.writeValueAsString(saleInformation);
-                LOG.info("Successfully read the file. File data: {}", salesData);
-                salesFileProducer.sendSalesData(salesData);
+                saleInformations.add(saleInformation);
+                LOG.info("Successfully read the file. File data: {}", saleInformation);
             }
+            SalesFileInformation salesData = new SalesFileInformation(saleFile.getName(), new Date(), saleInformations);
+            salesFileProducer.sendSalesData(objectMapper.writeValueAsString(salesData));
+
             LOG.info("Move read file to archive directory");
             return true;
         } catch (IOException | CsvValidationException | ParseException e) {

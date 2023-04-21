@@ -1,2 +1,5 @@
 datetime,product,quantity,price
-1/1/23 9:10 PM,Product Name,2,1000
+1/1/23 9:10 PM,Product 1,2,500
+1/1/23 9:11 PM,Product 2,2,1000
+1/1/23 9:10 PM,Product 3,2,1200
+1/1/23 9:10 PM,Product 4,2,1300
