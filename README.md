@@ -14,3 +14,10 @@ All the sales file contain inside /resources/sales folder. You can add a new csv
 > datetime,product,quantity,price
 > 1/1/23 9:10 PM,Product Name,2,1000
 > ```
+---
+You can also upload the sales file using this API request:
+```curl
+curl --location 'http://localhost:8081/sales-files' \
+--header 'Cookie: csrftoken=yprQAO8C3jnb3FoC0DC355KahDDiFd5i' \
+--form 'file=@"/C:/Users/dungdang/Downloads/sales.csv"'
+```
